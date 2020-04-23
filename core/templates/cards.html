@@ -1,0 +1,64 @@
+<div class="row">
+    
+    <div class="col-sm-12">
+        
+        {% if 'error' in items %}
+        <h2  class="title">Nenhum estabelecimento encontrado em {{ city }}</h2>
+        {% elif busca and items.businesses|length < 1 %}
+        <h2 class="title">Nada encontrado sobre o termo buscado</h2>
+        {% elif city and items %}
+        
+        <div style="align-content: center;">
+            <h2 class="title">Resultado da Busca</h2>
+        </div>
+
+        <div class="card-group">
+            <div class="row">
+                {% for biz in items.businesses %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="card card-blog">
+                        <div class="card-header card-header-image">
+                            <a href="{{ biz.url }}" target="_blank">
+                                <img class="img" src="{{ biz.image_url }}">
+                            </a>
+                            <div class="colored-shadow"
+                                style="background-image: url( '{{ biz.image_url }}'); opacity: 1;"></div>
+                        </div>
+                        <div class="card-body">
+                            <span class="text-info">{{ biz.name }}, {{ city }}</span><br />
+                            <h4 class="card-title">
+                                <a href="{{ biz.url }}" target="_blank">{{ biz.name }}</a>
+                            </h4>
+                            <div class="card-description">
+                                {{ biz.location.display_address.0 }} <br />
+                                {{ biz.location.display_address.1 }}
+                            </div>
+                            <div class="card-description">
+                                {{ biz.display_phone }} <br />
+                                <h4>Avaliaçoes {{ biz.review_count }}</h4>
+                            </div>
+                            <div class="card-description">
+                                <h4>{{ biz.categories.2.title }}</h4>
+                            </div>
+                            <div class="stats">
+                                <button class="btn btn-just-icon btn-link btn-warning">
+                                    <i class="material-icons">star</i>
+                                </button>
+                                {{ biz.rating }}
+                            </div>
+                            
+                        </div>
+                        <div class="card-footer justify-content-between">
+                            <div class="price">
+                                <h4>Preço {{ biz.price }}</h4>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

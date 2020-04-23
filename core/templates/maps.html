@@ -1,0 +1,56 @@
+<div class="card">
+    <div class="card-body">
+        <div class="card-header card-header-primary text-center">
+            <form autocomplete="off" action="{% url 'index' %}" class="form">
+                {% csrf_token %}
+              <div class="card-body">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons">navigation</i>
+                    </span>
+                  </div>
+                  <input class="form-control" type="text" name="key"
+                        placeholder="Digite um termo para busca (obrigatório)" required />
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons">place</i>
+                    </span>
+                  </div>
+                  <input class="form-control" type="text" name="loc"
+                        placeholder="Digite uma cidade para efetuar a busca" />
+                </div>
+              </div>
+              <div class="footer text-center">
+                <button type="submit" class="btn btn-primary btn-round">
+                    <i class="material-icons">map</i> Buscar
+                </button>
+            </div>
+            </form>
+        </div>
+          <h3 class="title">Localidades</h3> 
+          <div id="mapDiv" class="gmap" ></div>
+    </div>
+</div>
+</div>
+<script>
+    var lat = {{ items.businesses.0.coordinates.latitude | safe }};
+    var lon = {{ items.businesses.0.coordinates.longitude | safe }};
+
+    var map = L.map('mapDiv').setView([lat, lon], 13); //0 até 18
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+    }).addTo(map);
+
+    {% for biz in items.businesses %}
+        var marker = L.marker([{{ biz.coordinates.latitude | safe}}, {{ biz.coordinates.longitude | safe}}]).addTo(map);
+
+        marker.bindPopup("<b>{{ biz.name }}</b><br/>{{ biz.location.display_address.0 }} {{ biz.location.display_address.1 }}<br/>{{ city }}").openPopup();
+    {% endfor %}
+
+
+</script>
